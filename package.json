@@ -12,10 +12,13 @@
   },
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p packages/designer/tsconfig.json",
+    "build:designer": "npm run build -w @lcpf/designer",
+    "designer": "tsx packages/runtime/src/cli.ts designer --ui packages/designer/dist"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
   }

@@ -6,16 +6,20 @@ import { defineNode } from "../types.js";
 
 const ajv = new Ajv({ allErrors: true, strict: false, allowUnionTypes: true });
 
+export const AI_PROVIDER_IDS = ["claude", "codex", "kiro"] as const;
+
 const configSchema = z
   .object({
-    provider: z.string().min(1).max(50),
-    instructions: z.string().min(1).max(8000),
-    input: z.unknown().optional(),
-    contextFrom: z.array(z.string()).max(20).default([]),
-    outputSchema: z.record(z.string(), z.unknown()),
-    model: z.string().max(100).optional(),
-    timeoutMs: z.number().int().min(1000).max(600_000).default(120_000),
-    maxOutputBytes: z.number().int().min(1024).max(5_000_000).default(200_000)
+    provider: z.enum(AI_PROVIDER_IDS).default("claude").describe("AI CLI installed on this machine. It uses its default model."),
+    prompt: z.string().min(1).max(8000).describe("What the AI must do. Trusted text written by the workflow author."),
+    outputSchema: z
+      .record(z.string(), z.unknown())
+      .meta({ strictJson: true })
+      .describe('JSON Schema the answer must match, e.g. {"type":"object","required":["ok"],"properties":{"ok":{"type":"boolean"}}}'),
+    input: z.unknown().optional().meta({ advanced: true }).describe("Data for the AI to process, e.g. {{ input }} or {{ nodes.x.output }}. Sent separately from the prompt."),
+    contextFrom: z.array(z.string()).max(20).default([]).meta({ advanced: true }).describe("Ids of earlier nodes whose files are given as context."),
+    timeoutMs: z.number().int().min(1000).max(600_000).default(120_000).meta({ advanced: true }),
+    maxOutputBytes: z.number().int().min(1024).max(5_000_000).default(200_000).meta({ advanced: true })
   })
   .strict();
 
@@ -55,11 +59,10 @@ export function createAiCliNode(providers: readonly AiProvider[]) {
       ctx.log("ai.call", { provider: provider.id, contextFiles: contextFiles.length });
       const result = await provider.run(
         {
-          instructions: config.instructions,
+          instructions: config.prompt,
           payload: config.input,
           contextFiles,
           outputSchema: config.outputSchema,
-          ...(config.model ? { model: config.model } : {}),
           timeoutMs: config.timeoutMs,
           maxOutputBytes: config.maxOutputBytes
         },

@@ -38,7 +38,7 @@ A workflow is one JSON file. Order of execution is the order of `nodes`. The fil
       "type": "ai.cli",
       "config": {
         "provider": "claude",
-        "instructions": "Analyze the story against the rules and list risks.",
+        "prompt": "Analyze the story against the rules and list risks.",
         "input": "{{ nodes.normalized.output }}",
         "contextFrom": ["rules"],
         "outputSchema": {

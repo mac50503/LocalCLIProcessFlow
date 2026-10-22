@@ -51,11 +51,10 @@ interface AiProvider {
 }
 
 interface AiRequest {
-  instructions: string;              // system-level task description
+  instructions: string;              // the node's `prompt`; no model option, each CLI uses its default model
   payload: unknown;                  // data from earlier nodes, serialized by the adapter
   contextFiles: { path: string; content: string }[];  // already read via FileAccess
   outputSchema: object;              // JSON Schema
-  model?: string;
   timeoutMs: number;
   maxOutputBytes: number;
 }

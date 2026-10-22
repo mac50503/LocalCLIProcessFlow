@@ -9,7 +9,6 @@ export interface ClaudeProviderOptions {
 }
 
 const MAX_INSTRUCTIONS_CHARS = 8000;
-const MODEL_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,99}$/;
 const ENVELOPE_OVERHEAD_BYTES = 64 * 1024;
 
 const SYSTEM_RULES = [
@@ -69,9 +68,6 @@ export function createClaudeProvider(options: ClaudeProviderOptions = {}): AiPro
       if (request.instructions.length > MAX_INSTRUCTIONS_CHARS) {
         throw new AiError("AI_PROCESS_ERROR", `Instructions exceed ${MAX_INSTRUCTIONS_CHARS} characters`);
       }
-      if (request.model !== undefined && !MODEL_PATTERN.test(request.model)) {
-        throw new AiError("AI_PROCESS_ERROR", "Invalid model name");
-      }
 
       const args = [
         ...baseArgs,
@@ -81,8 +77,7 @@ export function createClaudeProvider(options: ClaudeProviderOptions = {}): AiPro
         "--no-session-persistence",
         "--strict-mcp-config",
         "--system-prompt", `${SYSTEM_RULES}\n\nTask:\n${request.instructions}`,
-        "--json-schema", JSON.stringify(request.outputSchema),
-        ...(request.model ? ["--model", request.model] : [])
+        "--json-schema", JSON.stringify(request.outputSchema)
       ];
 
       let stdout: string;

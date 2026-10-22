@@ -23,7 +23,6 @@ export interface AiRequest {
   payload: unknown;
   contextFiles: { path: string; content: string }[];
   outputSchema: object;
-  model?: string;
   timeoutMs: number;
   maxOutputBytes: number;
 }

@@ -41,9 +41,10 @@ describe("claude provider (fake CLI)", () => {
   });
 
   it("builds a locked-down command line", async () => {
-    const result = await provider("structured").run({ ...request, model: "sonnet" }, signal());
+    const result = await provider("structured").run(request, signal());
     const args = (result.json as { echoArgs: string[] }).echoArgs;
-    expect(args).toEqual(expect.arrayContaining(["-p", "--no-session-persistence", "--strict-mcp-config", "--model", "sonnet"]));
+    expect(args).toEqual(expect.arrayContaining(["-p", "--no-session-persistence", "--strict-mcp-config"]));
+    expect(args).not.toContain("--model");
     expect(args[args.indexOf("--tools") + 1]).toBe("");
     expect(args[args.indexOf("--output-format") + 1]).toBe("json");
     expect(JSON.parse(args[args.indexOf("--json-schema") + 1] as string)).toEqual({ type: "object" });
@@ -89,8 +90,7 @@ describe("claude provider (fake CLI)", () => {
     expect(await codeOf(provider("structured").run({ ...request, maxOutputBytes: 10 }, signal()))).toBe("AI_OUTPUT_TOO_LARGE");
   });
 
-  it("rejects suspicious model names and oversized instructions", async () => {
-    expect(await codeOf(provider("structured").run({ ...request, model: "--evil flag" }, signal()))).toBe("AI_PROCESS_ERROR");
+  it("rejects oversized instructions", async () => {
     expect(await codeOf(provider("structured").run({ ...request, instructions: "x".repeat(9000) }, signal()))).toBe("AI_PROCESS_ERROR");
   });
 

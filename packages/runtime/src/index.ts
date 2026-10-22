@@ -8,3 +8,5 @@ export { createClaudeProvider, type ClaudeProviderOptions } from "./ai/claude.js
 export { AiError, type AiProvider, type AiRequest, type AiResult, type AiErrorCode } from "./ai/types.js";
 export { runProcess, ProcessError, minimalEnv, type ProcessRequest, type ProcessOutput } from "./ai/process.js";
 export { createAiCliNode } from "./nodes/ai-cli.js";
+export { createServer, allPermissions, type ServerOptions, type RunningServer } from "./server/app.js";
+export { WorkflowStore, StoreError, type WorkflowSummary } from "./server/store.js";

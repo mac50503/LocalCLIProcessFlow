@@ -37,7 +37,7 @@ const schema = { type: "object", required: ["ok"], properties: { ok: { type: "bo
 const ai = (config: Record<string, unknown> = {}) => ({
   id: "ai",
   type: "ai.cli",
-  config: { provider: "claude", instructions: "Do it", outputSchema: schema, timeoutMs: 5000, ...config }
+  config: { provider: "claude", prompt: "Do it", outputSchema: schema, timeoutMs: 5000, ...config }
 });
 const fakeProvider = (mode: string) => createClaudeProvider({ command: process.execPath, baseArgs: [fake, mode] });
 
