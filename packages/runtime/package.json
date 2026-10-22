@@ -1,0 +1,15 @@
+{
+  "name": "@lcpf/runtime",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sequential workflow engine, built-in nodes and AI CLI adapters. Does not depend on the designer.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@lcpf/shared": "*",
+    "ajv": "^8.20.0",
+    "zod": "^4.6.7"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "localcliprocessflow",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local, visual orchestrator for linear workflows that reuses the AI CLIs already installed on your machine.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
