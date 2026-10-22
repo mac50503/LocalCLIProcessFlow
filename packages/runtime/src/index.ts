@@ -4,3 +4,7 @@ export { NodeRegistry } from "./registry.js";
 export { runWorkflow, type RunOptions } from "./engine.js";
 export { validateWorkflow, type ValidationContext, type ValidatedWorkflow } from "./validate.js";
 export { createDefaultRegistry, deterministicNodes } from "./nodes/index.js";
+export { createClaudeProvider, type ClaudeProviderOptions } from "./ai/claude.js";
+export { AiError, type AiProvider, type AiRequest, type AiResult, type AiErrorCode } from "./ai/types.js";
+export { runProcess, ProcessError, minimalEnv, type ProcessRequest, type ProcessOutput } from "./ai/process.js";
+export { createAiCliNode } from "./nodes/ai-cli.js";
